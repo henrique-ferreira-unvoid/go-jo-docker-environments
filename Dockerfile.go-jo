@@ -1,0 +1,34 @@
+# Use an official Ubuntu base image with specific version
+FROM ubuntu:24.04 AS builder
+
+# Disable prompt during package installation
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install necessary dependencies
+# Group installations to optimize layer caching
+RUN apt-get update && \
+    apt-get upgrade -y
+
+# Create a new user 'go-jo' with sudo privileges
+RUN useradd -ms /bin/bash go-jo && \
+    echo 'go-jo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Copy dumb systemctl first (rarely changes)
+COPY ./systemctl /usr/bin/systemctl 
+RUN chmod +x /usr/bin/systemctl
+
+# Switch to non-root user
+USER go-jo
+WORKDIR /home/go-jo
+
+# Copy Go-jo binary (changes most frequently)
+COPY ./go-jo-selected.deb .
+
+# Install Go-jo & Configure
+RUN sudo apt install -y ./go-jo-selected.deb
+
+# Copy the entrypoint script into the container
+COPY ./entrypoint-go-jo.sh /usr/local/bin/entrypoint.sh
+RUN sudo chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
