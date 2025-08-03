@@ -20,13 +20,13 @@ build:
 # Start the Docker containers
 start:
 	@echo "Starting Docker containers..."
-	docker compose up -d
+	docker compose -p gojo-syslog up -d
 	@echo "Services started. Use 'make status' to check status."
 
 # Stop the Docker containers
 stop:
 	@echo "Stopping Docker containers..."
-	docker compose down
+	docker compose -p gojo-syslog down
 
 # Restart the Docker containers
 restart: stop start
@@ -34,9 +34,9 @@ restart: stop start
 # Remove all containers and images
 clean:
 	@echo "Removing containers..."
-	docker compose down
+	docker compose -p gojo-syslog down
 	@echo "Removing volumes..."
-	docker compose down -v
+	docker compose -p gojo-syslog down -v
 	@echo "Removing images..."
 	docker rmi go-jo:1.0 syslog || true
 	@echo "Clean complete."
