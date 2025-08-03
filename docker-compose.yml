@@ -5,8 +5,6 @@ services:
       dockerfile: ./Dockerfile.go-jo
     container_name: go-jo
     image: go-jo:1.0
-    ports:
-      - "1207:1207"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
