@@ -25,7 +25,7 @@ WORKDIR /home/go-jo
 COPY ./go-jo-selected.deb .
 
 # Install Go-jo & Configure
-RUN sudo apt install -y ./go-jo-selected.deb
+RUN apt install -y ./go-jo-selected.deb
 
 # Copy the entrypoint script into the container
 COPY ./entrypoint-go-jo.sh /usr/local/bin/entrypoint.sh
