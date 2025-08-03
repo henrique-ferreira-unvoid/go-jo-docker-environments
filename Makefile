@@ -38,7 +38,7 @@ clean:
 	@echo "Removing volumes..."
 	docker compose down -v
 	@echo "Removing images..."
-	docker rmi go-jo:1.0 || true
+	docker rmi go-jo:1.0 syslog || true
 	@echo "Clean complete."
 
 # Open a shell in the Go-jo container

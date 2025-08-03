@@ -8,3 +8,13 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+    depends_on:
+      - syslog
+
+  syslog:
+      build:
+        context: .
+        dockerfile: ./Dockerfile.syslog
+      container_name: syslog
+      ports:
+        - "516:516"

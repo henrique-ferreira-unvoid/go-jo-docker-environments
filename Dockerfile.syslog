@@ -1,0 +1,28 @@
+# Start from the official Splunk image
+FROM ubuntu:22.04
+
+# Install necessary dependencies
+# Group installations to optimize layer caching
+RUN apt update && \
+    apt install sudo -y --no-install-recommends
+
+# Switch to root to make system changes
+USER root
+
+# Install Rsyslog
+RUN apt install rsyslog -y
+
+# Copy dumb systemctl first (rarely changes)
+COPY ./systemctl /usr/bin/systemctl 
+RUN chmod +x /usr/bin/systemctl
+
+# Copy configuration files
+COPY ./syslog/rsyslog.conf /etc/rsyslog.conf
+RUN touch /var/log/syslog
+RUN sudo chmod 646 /var/log/syslog
+
+# Copy the entrypoint script into the container
+COPY ./entrypoint-syslog.sh /usr/local/bin/entrypoint.sh
+RUN sudo chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
